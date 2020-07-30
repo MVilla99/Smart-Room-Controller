@@ -25,8 +25,8 @@ void setup()
 
 void loop()
 {
-button1.tick();
-Menu();
+button1.tick(); // make func. which menu 0-4 val 0 being main, and 4 sub menu. menu select each. 
+Menu(); //main menu ==0 ; set sub menu value ; 
 Select();
 }
 void click1(){
