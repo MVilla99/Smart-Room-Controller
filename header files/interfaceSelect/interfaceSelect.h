@@ -1,9 +1,10 @@
-/* written by mauricio villa courtesy of his big ol' brain ;) */
+/* written by mauricio villa
+ * this header file is used to display bitmaps of arrows to the right of the screen
+ * so the user can visualize what option theyre selecting when they click the button
+ */
 
 #include <SelPosition.h>
-// needs an encoder with encoder.h initialized in main code to be able to run.
-// Serial print of int pos at the bottom of code, remove if you dont want to see pos on serial monitor.
-	//four arrow position
+
 void Select1(){
  int state;
   int pos;
@@ -126,7 +127,7 @@ void Select4(){
   int pos;
   static int lastpos;
   state = enc.read();
-  pos = (state/24); // directly read from enc and 96/24 was 4 pos needed
+  pos = (state/24); 
 if(pos<0){
   enc.write(0);
 }
@@ -159,13 +160,13 @@ if(pos>5){
 Serial.println(pos);
 }
 
-	//you know what it is...
+	//code for visualizing which smart menu option youre on
 void SelectSM(){
  int state;
   int pos;
   static int lastpos;
   state = enc.read();
-  pos = (state/48); // directly read from enc and 96/24 was 4 pos needed
+  pos = (state/48); 
 if(pos<0){
   enc.write(0);
 }
@@ -174,6 +175,34 @@ if(pos>2){
 }
   if(pos != lastpos){ 
   if(pos == 1){ // use switch cases in normal code    
+    oled.setTextXY(4,0);
+    oled.drawBitmap(POS34, 1024);
+    lastpos = 1; 
+  }
+  if(pos ==2) {
+    oled.setTextXY(6,0);
+    oled.drawBitmap(POS44, 1024);
+    lastpos =2;
+  }
+  
+}
+Serial.println(pos);
+}
+
+void SelectPWR(){ // code for visualizing which power select option youre on
+ int state;
+  int pos;
+  static int lastpos;
+  state = enc.read();
+  pos = (state/48);
+if(pos<0){
+  enc.write(0);
+}
+if(pos>2){
+  enc.write(96);
+}
+  if(pos != lastpos){ 
+  if(pos == 1){ 
     oled.setTextXY(4,0);
     oled.drawBitmap(POS34, 1024);
     lastpos = 1; 

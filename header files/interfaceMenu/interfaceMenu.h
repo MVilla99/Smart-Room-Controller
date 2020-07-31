@@ -1,7 +1,7 @@
 /* written by mauricio villa */
 // needs ACROBOTIC_SSD1306 initialization in setup before use.
 
-void Menu(){
+void Menu(){ // main menu for displaying all functions for smart room controller
   oled.setTextXY(0,0);
   oled.putString("BME readings:");
   oled.setTextXY(2,0);
@@ -12,26 +12,7 @@ void Menu(){
   oled.putString("Power");
 }
 
-void Menu2(){
-//oled.clearDisplay();
-//oled.setTextXY(3,3);
-//oled.putString("menu 2 test");
-
-}
-
-void Menu3(){
-//oled.clearDisplay();
-oled.setTextXY(0,0);
-oled.putString("menu3 opt.1");
-oled.setTextXY(2,0);
-oled.putString("menu3 opt.2");
-oled.setTextXY(4,0);
-oled.putString("menu3 opt.3");
-oled.setTextXY(6,0);
-oled.putString("menu3 opt.4");
-}
-
-void bmeMenu(){
+void bmeMenu(){ // menu for selectiong which bme reading to display
 oled.setTextXY(0,0);
 oled.putString("temperature");
 oled.setTextXY(2,0);
@@ -42,17 +23,6 @@ oled.setTextXY(6,0);
 oled.putString("humidity");
 }
 
-void conStat(){ //change this to smart control?
-oled.setTextXY(0,0);
-oled.putString("Ethernet stat:");
-oled.setTextXY(2,0);
-//oled.putString(//stringethernetstat);
-oled.setTextXY(4,0);
-oled.putString("RF link stat:");
-oled.setTextXY(6,0);
-//oled.putString(//bytepackagedata);
-}
-
 void SmartStatMenu(){
 oled.setTextXY(4,0);
 oled.putString("Yes");
@@ -60,7 +30,7 @@ oled.setTextXY(6,0);
 oled.putString("No");
 }
 
-void SSMyes(){
+void SSMyes(){ // display message for enabling smart control
 oled.setTextXY(0,0);
 oled.putString("Thank you for");
 oled.setTextXY(1,0);
@@ -73,7 +43,15 @@ oled.setTextXY(6,0);
 oled.putString("disable control");
 }
 
-void userManual(){
+void SSMno(){ //display message for turning off smart control 
+oled.setTextXY(0,0);
+oled.putString("Smart controller");
+oled.setTextXY(1,0);
+oled.putString("set to off");
+
+}
+
+void userManual(){ //description of what the button does
 oled.setTextXY(0,0);
 oled.putString("push button to");
 oled.setTextXY(1,0);
@@ -90,7 +68,7 @@ oled.setTextXY(6,0);
 oled.putString("main menu");
 }
 
-void powerSel(){
+void powerSel(){ // menu for switching the smart room controller off
 oled.setTextXY(0,0);
 oled.putString("switch SRC off?");
 oled.setTextXY(4,0);

@@ -29,9 +29,11 @@
 int encButton = 17;
 int menuButton = 20;
 OneButton button1(encButton,false); // try with normal button 
+
 bool buttonState = HIGH;
 bool DBclick = LOW;
 bool subMenu = false;
+
 int i;
 int s;
 static int n;
@@ -40,7 +42,11 @@ int pwr;
   bool activated;
   bool onoff = false;
   bool last = HIGH;
+     
      bool star = false;
+     bool drip = false;
+     bool thicc = false;
+     bool zap = false;
 int ledPin = 8;
 Adafruit_NeoPixel pixel(12, 20, NEO_GRB + NEO_KHZ800);
 int showTemp;
@@ -71,7 +77,7 @@ button1.setPressTicks(2000);
  // long press for off?
  
 }
-
+// dont forget servo code.
 void loop() { // main code. menu and submenu displays and options to select.
  luminosity();
   temp = (bme.readTemperature() * 9/5)+32;
@@ -101,19 +107,19 @@ button1.tick();
               break;
             case 1:
             Serial.println("SM 1");           
-              
              //sol(); //bmap dont forget the if statement for snowflake
-             
              if (star == false){
               sol();
               star = true;
-             }
-             
+             }  
              bmeValT(temp);
               break;             
             case 2:
+             if (thicc == false){
+              weights();
+              thicc = true;
+             }
               bmeValP(pres);
-            //  weights(); bmap
             Serial.println("SM 2");
               break;
             case 3:
@@ -121,8 +127,11 @@ button1.tick();
               Serial.println("SM 3");
               break;
             case 4:
-            bmeValH(hum);
-            moisture(); //bmap
+             if (drip == false){
+              moisture();
+              drip = true;
+              } 
+              bmeValH(hum);         
             Serial.println("SM 4");
               break;          
           }   
@@ -163,8 +172,10 @@ button1.tick();
       Serial.println("three");
       break;
     case 4:
-       //PWR(); bmap
-        
+      if (zap == false){
+        PWR();
+        zap = true;
+      }
       Serial.println("four");
       break;  
   }
@@ -191,6 +202,7 @@ void click1(){ // calling click function from one button library. used to select
     }
     }
 
+
 }
 void doubleclick1(){ // calling the double click function from One Button library.
   DBclick =! DBclick;
@@ -199,6 +211,18 @@ void doubleclick1(){ // calling the double click function from One Button librar
   s=0;
   n=0;
   i=0;
+     if (star == true){ 
+       star = false;
+     }
+     if(drip == true){
+      drip = false;
+     }
+     if(thicc == true){
+      thicc = false;
+     }
+     if(zap == true){
+      zap = false;
+     }
 }
 void smartStateLed(){ // function for displaying wether or not smart control is on
  if(smartControl == true){
@@ -261,10 +285,10 @@ void hueSet(){ // dont forget to make an activation for hue.
   activated=true;
   bulb = 2;
   if(smartControl == true){
-  setHue(bulb, activated,colorShift[showTemp],luminosity()); //photoresistor value
+  setHue(bulb, activated,colorShift[showTemp],luminosity());
   }
   if(smartControl == false){
-  setHue(bulb, activated,colorShift[showTemp],250); //photoresistor value
+  setHue(bulb, activated,colorShift[showTemp],250);
   } 
 }
 }

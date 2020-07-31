@@ -1,3 +1,7 @@
+/* header file for defining certain HEX colors
+ * for use in an array to visualize what temperature the room is at
+*/
+
 const int mid1 = 0x2F4F4F;
 const int blue0 = 0x40E0D0;
 const int blue1 = 0x00CED1;
