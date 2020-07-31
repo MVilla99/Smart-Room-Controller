@@ -40,6 +40,7 @@ int pwr;
   bool activated;
   bool onoff = false;
   bool last = HIGH;
+     bool star = false;
 int ledPin = 8;
 Adafruit_NeoPixel pixel(12, 20, NEO_GRB + NEO_KHZ800);
 int showTemp;
@@ -67,18 +68,21 @@ button1.attachClick(click1);
 button1.attachDoubleClick(doubleclick1);
 button1.setClickTicks(250);
 button1.setPressTicks(2000);
+ // long press for off?
  
 }
 
-void loop() {
+void loop() { // main code. menu and submenu displays and options to select.
+ luminosity();
   temp = (bme.readTemperature() * 9/5)+32;
   pres = (bme.readPressure() /100.0f)/68.9476;
   alt = bme.readAltitude(SEALEVELPRESSURE_HPA)*3.28084;
   hum = bme.readHumidity();
-
+// make void for displaying ethernet status on oled
 button1.tick();
   subMenu = false;
   smartMenu = false;
+  
   switch(i){
     
     case 0:
@@ -87,18 +91,29 @@ button1.tick();
       break;
     case 1:  // use enc "ticks" mapped to each S-C statement and the button will act as the select
      subMenu = true;     
+         
             switch(n){              
             case 0:
             Serial.println("SM 0");
+          
             bmeMenu();
             Select2();
               break;
-            case 1: // SMarray[x,y,z,q] n = SMarray[]
+            case 1:
             Serial.println("SM 1");           
-              bmeValT(temp);
+              
+             //sol(); //bmap dont forget the if statement for snowflake
+             
+             if (star == false){
+              sol();
+              star = true;
+             }
+             
+             bmeValT(temp);
               break;             
             case 2:
               bmeValP(pres);
+            //  weights(); bmap
             Serial.println("SM 2");
               break;
             case 3:
@@ -107,6 +122,7 @@ button1.tick();
               break;
             case 4:
             bmeValH(hum);
+            moisture(); //bmap
             Serial.println("SM 4");
               break;          
           }   
@@ -116,58 +132,39 @@ button1.tick();
       smartMenu = true;
         switch(s){
           case 0:
-          //menu options
           SmartStatMenu();
           SelectSM();
          break;
           case 1:
           SSMyes();
-         smartControl = true;
-         hueState = true;
-         delay(5000);
-         s=0;
-         i=0;
-         oled.clearDisplay();
-         break;
-          case 2:
-          //no function, s=0 and smartControl = false
-           SSMno();
-          smartControl = false;
+          smartControl = true;
+          hueState = true;
           delay(5000);
           s=0;
           i=0;
           oled.clearDisplay();
+         break;
+          case 2:
+           SSMno();
+           smartControl = false;
+           delay(5000);
+           s=0;
+           i=0;
+           oled.clearDisplay();
           
          break;
         }  
       break;
     case 3:
-      userManual(); // doesnt return to main. maybe because no scroll funct.?
-      // put smart control func. in here. 
+      userManual();
       delay(10000);
       oled.clearDisplay();
       i=0;
       Serial.println("three");
       break;
     case 4:
-      pwrMenu = true;
-        switch(pwr){
-          
-          case 0:
-          SelectPWR();
-          powerSel();
-            break;
-          case 1:
-          oled.setTextXY(0,0);
-          oled.putString("powering off");
-          oled.setTextXY(2,0);
-          oled.putString("thank you for");
-          oled.setTextXY(4,0);
-          oled.putString("use of this SRC");
-            break;
-          case 2:
-            break;
-        }
+       //PWR(); bmap
+        
       Serial.println("four");
       break;  
   }
@@ -178,7 +175,7 @@ button1.tick();
  NeoRing();
 
 }
-void click1(){
+void click1(){ // calling click function from one button library. used to select menus and menu options.
   buttonState =! buttonState;
   oled.clearDisplay();
   if(subMenu == true && smartMenu == false){ 
@@ -188,17 +185,14 @@ void click1(){
             if(smartMenu == true){
             s = (enc.read()/48);
             }
-    }
-    else if (pwrMenu == true){
-      pwr = (enc.read()/48);
-    }
+    
    else {
       i = (enc.read()/24);
     }
-    
+    }
 
 }
-void doubleclick1(){
+void doubleclick1(){ // calling the double click function from One Button library.
   DBclick =! DBclick;
   oled.clearDisplay();
   enc.write(0);
@@ -206,7 +200,7 @@ void doubleclick1(){
   n=0;
   i=0;
 }
-void smartStateLed(){
+void smartStateLed(){ // function for displaying wether or not smart control is on
  if(smartControl == true){
   digitalWrite(ledPin, HIGH);
 }
@@ -215,30 +209,27 @@ void smartStateLed(){
  }
 }
 
-void bmeValT(float ptemp){
+void bmeValT(float ptemp){ // function to display temperature
   oled.setTextXY(0,0);
   oled.putString(float(ptemp));
 }
-void bmeValP(float ppres){
+void bmeValP(float ppres){ // function to display pressure
   oled.setTextXY(0,0);
   oled.putString(float(ppres));
 }
-void bmeValA(float palt){
+void bmeValA(float palt){  // function to display altitude
   oled.setTextXY(0,0);
   oled.putString(float(palt));
 }
-void bmeValH(float phum){
+void bmeValH(float phum){ //function to display humidity
   oled.setTextXY(0,0);
   oled.putString(float(phum));
 }
-
-void wemoSet(){
-  /*
-   * for intelligent control, boolean for int control will (smartControl)
-   * set wemoSet on and off and use void for brightness for hue
-   */
-  //int wemoHot = 3;
-//  int wemoCold = 2;
+void openingmessage(){
+  oled.setTextXY(0,0);
+  // if statement for ethernet status
+}
+void wemoSet(){ // function for smart control to use the wemo pins. 
   int wemo;
   int lasttemp;  //put timer code for reading every 5 min
    // if(temp >= 70 && temp <=75){ // find way to make range from 70 - 75
@@ -261,46 +252,47 @@ void wemoSet(){
    }  
    
 }
-/*
-void hueSet(){
-  if( hueState == true){ // just turn on for when Neopix turn on 
+
+void hueSet(){ // dont forget to make an activation for hue.
+  if( hueState == true){ // just turn on for when Neopix turn on or smart control on.
   onoff =! onoff;
   }
   if(onoff==true){
   activated=true;
   bulb = 2;
   if(smartControl == true){
-  setHue(bulb, activated,colorshift[showTemp],luminosity()); //photoresistor value
+  setHue(bulb, activated,colorShift[showTemp],luminosity()); //photoresistor value
   }
   if(smartControl == false){
-  setHue(bulb, activated,colorshift[showTemp],250); //photoresistor value
-  }
-  //^^ get color from neopixel color array
- // ^^ and brightness from photoresistor 
-  
+  setHue(bulb, activated,colorShift[showTemp],250); //photoresistor value
+  } 
 }
-*/
-void NeoRing(){
-  //int showTemp;
+}
+
+void NeoRing(){ // function for using NeoPixel ring. Also uses smart control.
     showTemp = temp;
     showTemp = map(showTemp, 0, 100, 0, 12);
     if (smartControl == false){ // smart control is name of intelligent control func.
+    pixel.clear();
     pixel.setPixelColor(showTemp,colorShift[showTemp]);
     pixel.setBrightness(250);//use photo resistor value
     pixel.show();
     }
     if (smartControl == true){
+    pixel.clear();
     pixel.setPixelColor(showTemp,colorShift[showTemp]);
     pixel.setBrightness(luminosity());//use photo resistor value
     pixel.show();
+    Serial.println(luminosity());
     }
 }
 
-unsigned int luminosity(){
-  int pResistor = 14; //or whatever number signal is
+unsigned int luminosity(){ // function for using a photoresistor to change NeoPixel and hue brightness
+  int pResistor = 14; 
   int pSenseVal;
+  int analogVal;
   int bitSenseVal;
-  pSenseVal = digitalRead(pResistor);
-  bitSenseVal = map(pSenseVal, 0, 10230, 0, 255);  // average looks like 5k so maybe map that
+  pSenseVal = analogRead(pResistor);
+  bitSenseVal = map(pSenseVal, 0, 1023, 0, 255);  // raise bottom number for dim
   return bitSenseVal;
 }
