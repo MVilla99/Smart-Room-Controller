@@ -1,0 +1,57 @@
+Parts list for included parts in the Smart Room Controller.
+
+NeoPixel ring:
+(1) Adafruit NeoPixel Ring - 12x5050 RGB LED with integrated Drivers[ADA1643]
+available on Adafruit website
+
+Teensy 3.2:
+(1) AMR-based microcontroller
+available on Amazon
+
+Breadboard:
+(1) 10pcs Breadboard 830 Point Solderless Prototype PCB Board
+available on Amazon
+
+Button:
+(1) Gikfun 12x12x7.3 mm Tact Tactile Push Button Momentary SMD PCB
+available on Amazon
+
+Resistors:
+(1) ELEGOO 17 Values 1% Resistor Kit Assortment
+available on Amazon
+
+Diodes:
+(1) 459pcs(5 Colorsx90pcs)5mm LED Light Emitting Diode
+available on Amazon 
+
+OLED Display:
+(1) 4pcs I2C .96 inch OLED Display Module
+available on Amazon
+
+BME280:
+(1) KeeYees 3pcs BME280 Compatible with BMP280 Digital 5V Temperature Humidity Sensor
+available on Amazon 
+
+Stepper Motor:
+(1) HiLetgo 5pcs ULN2003 28BYJ-48 4-Phase Stepper Motor with 5V Drive
+available on Amazon
+
+Ethernet Port:
+(1) WIZ850io
+available on Eshop
+
+Encoder / Breakout:
+(1) Rotary Encoder (red/green) 
+available on Sparkfun
+
+Hue Hub and Bulbs:
+(1) Philips Hue White and Color LED Smart Button Starter Kit
+available on Amazon
+
+Wemo switches:
+(1) Wemo Mini Smart Plug WiFi Enabled
+available on Amazon
+
+3D print resin - white:
+(130mL) White Resin 1 L
+available on Formlabs

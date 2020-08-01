@@ -1,4 +1,4 @@
-// testing for one button switch case
+                 // testing for one button switch case
 #include <Wire.h>
 #include <ACROBOTIC_SSD1306.h>
 #include <Adafruit_NeoPixel.h>
@@ -14,7 +14,6 @@
 #include <mac.h>
 #include <wemo.h>
 #include <hue.h>
-#include <pin13.h>
 #include <Adafruit_BME280.h>
 #include <Adafruit_Sensor.h>
 #include <SRCbmapdraw.h>
@@ -42,7 +41,8 @@ int pwr;
   bool activated;
   bool onoff = false;
   bool last = HIGH;
-     
+  bool startState = false;
+//booleans for bitmap states during bme read menu.      
      bool star = false;
      bool drip = false;
      bool thicc = false;
@@ -86,22 +86,19 @@ void loop() { // main code. menu and submenu displays and options to select.
   hum = bme.readHumidity();
 // make void for displaying ethernet status on oled
 button1.tick();
+
   subMenu = false;
-  smartMenu = false;
-  
-  switch(i){
-    
+  smartMenu = false; 
+  switch(i){   
     case 0:
     Menu();
     Select1();
       break;
-    case 1:  // use enc "ticks" mapped to each S-C statement and the button will act as the select
-     subMenu = true;     
-         
+    case 1:
+     subMenu = true;             
             switch(n){              
             case 0:
             Serial.println("SM 0");
-          
             bmeMenu();
             Select2();
               break;
@@ -181,11 +178,12 @@ button1.tick();
   }
   Serial.print(n);
  smartStateLed();
- // wemoSet();
- //hueSet();
+// wemoSet();
+// hueSet();
  NeoRing();
 
 }
+
 void click1(){ // calling click function from one button library. used to select menus and menu options.
   buttonState =! buttonState;
   oled.clearDisplay();
@@ -254,23 +252,18 @@ void openingmessage(){
   // if statement for ethernet status
 }
 void wemoSet(){ // function for smart control to use the wemo pins. 
-  int wemo;
-  int lasttemp;  //put timer code for reading every 5 min
-   // if(temp >= 70 && temp <=75){ // find way to make range from 70 - 75
-  //  switchOFF(wemo);
-    //switchOFF(wemoHot);
-    //}
+  int wemo; 
    if(temp<=69){
     wemo = 1;
    switchON(wemo);
-   if(/*temp =! lasttemp && */temp<=69){
-   switchOFF(2);
+   if(temp>69){
+   switchOFF(wemo);
     }
    }
    if(temp>=70){
     wemo = 2;
    switchON(wemo);
-   if(/*temp =! lasttemp && */temp>=75){
+   if(temp<70){
    switchOFF(wemo);
     }
    }  
@@ -296,10 +289,10 @@ void hueSet(){ // dont forget to make an activation for hue.
 void NeoRing(){ // function for using NeoPixel ring. Also uses smart control.
     showTemp = temp;
     showTemp = map(showTemp, 0, 100, 0, 12);
-    if (smartControl == false){ // smart control is name of intelligent control func.
+    if (smartControl == false){
     pixel.clear();
     pixel.setPixelColor(showTemp,colorShift[showTemp]);
-    pixel.setBrightness(250);//use photo resistor value
+    pixel.setBrightness(250);
     pixel.show();
     }
     if (smartControl == true){
@@ -317,6 +310,6 @@ unsigned int luminosity(){ // function for using a photoresistor to change NeoPi
   int analogVal;
   int bitSenseVal;
   pSenseVal = analogRead(pResistor);
-  bitSenseVal = map(pSenseVal, 0, 1023, 0, 255);  // raise bottom number for dim
+  bitSenseVal = map(pSenseVal, 200, 1023, 0, 255);  // raise bottom number for dim
   return bitSenseVal;
 }
