@@ -18,7 +18,19 @@ void sol(){
 oled.setTextXY(0,0); // its refreshing too fast
 oled.drawBitmap(sun,1024); 
 }
+void flake(){
+oled.setTextXY(0,0);
+oled.drawBitmap(snowflake,1024);
+}
 void PWR(){
 oled.setTextXY(5,0);
 oled.drawBitmap(powerSymbol,1024);
+}
+void SCon(){
+oled.setTextXY(0,0);
+oled.drawBitmap(ScontrolON,1024);
+}
+void SCoff(){
+oled.setTextXY(0,0);
+oled.drawBitmap(ScontrolOFF,1024);
 }
